@@ -13,6 +13,7 @@ enum UserSex {
   MALE
   FEMALE
 }
+
 enum Day {
   SATURDAY
   SUNDAY
