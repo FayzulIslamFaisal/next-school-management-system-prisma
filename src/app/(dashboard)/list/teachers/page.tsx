@@ -7,7 +7,7 @@ import { Classes, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma"
-import { ta } from "zod/v4/locales";
+import { id, ta } from "zod/v4/locales";
 import{ITEM_PER_PAGE} from "@/lib/settings"
 
 
@@ -84,7 +84,8 @@ const renderRow = (item:TeacherList ) => (
           // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
           //   <Image src="/delete.png" alt="" width={16} height={16} />
           // </button>
-          <FormModal table="teacher" type="delete" id={item.id}/>
+          // <FormModal table="teacher" type="delete" id={item.id}/>
+          <FormModal table="student" type="delete" id={item.id}/>
         )}
       </div>
     </td>
@@ -97,8 +98,25 @@ const TeacherListPage = async ({
 }) => {
   const {page, ...queryParam} = searchParams
   const p = page ? parseInt(page) : 1 ;
-const [data, count] = await prisma.$transaction([
+  if (queryParam) {
+    for (const [key, value] of Object.entries(queryParam)) {
+      switch (key) {
+        case "classesId":{
+          lessons:{
+            some:{
+              classesId: parseInt(value || "0")
+            }
+          }
+        }
+          
+        
+      }
+      
+    }
+  }
+  const [data, count] = await prisma.$transaction([
   prisma.teacher.findMany({
+    // where: queryParam,
     include: {
       teacherSubjects: true,
       classes: true,
